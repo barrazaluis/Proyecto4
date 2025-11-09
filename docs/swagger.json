@@ -3,24 +3,162 @@
   "info": {
     "title": "API de Reservas de Hotel",
     "version": "1.0.0",
-    "description": "Documentación de la API para gestionar reservas de hoteles."
+    "description": "API para la gestión de reservas de hoteles. Incluye operaciones CRUD y filtros avanzados."
   },
+  "servers": [
+    {
+      "url": "http://localhost:3000",
+      "description": "Servidor local"
+    }
+  ],
   "paths": {
     "/api/reservas": {
       "get": {
-        "summary": "Listar todas las reservas",
+        "summary": "Listar todas las reservas (con filtros opcionales)",
+        "description": "Obtiene una lista de todas las reservas. Puede filtrar por hotel, fechas, tipo de habitación, estado o número de huéspedes.",
+        "parameters": [
+          {
+            "name": "hotel",
+            "in": "query",
+            "schema": { "type": "string" },
+            "description": "Filtra las reservas por nombre del hotel"
+          },
+          {
+            "name": "fecha_inicio",
+            "in": "query",
+            "schema": { "type": "string", "format": "date" },
+            "description": "Filtra reservas desde esta fecha (inclusive)"
+          },
+          {
+            "name": "fecha_fin",
+            "in": "query",
+            "schema": { "type": "string", "format": "date" },
+            "description": "Filtra reservas hasta esta fecha (inclusive)"
+          },
+          {
+            "name": "tipo_habitacion",
+            "in": "query",
+            "schema": { "type": "string" },
+            "description": "Filtra por tipo de habitación (ej: doble, suite, familiar)"
+          },
+          {
+            "name": "estado",
+            "in": "query",
+            "schema": { "type": "string" },
+            "description": "Filtra por estado de la reserva (pendiente, confirmada, cancelada, etc.)"
+          },
+          {
+            "name": "num_huespedes",
+            "in": "query",
+            "schema": { "type": "integer" },
+            "description": "Filtra reservas con igual o mayor número de huéspedes"
+          }
+        ],
         "responses": {
           "200": {
-            "description": "Lista de reservas"
+            "description": "Lista de reservas obtenida correctamente"
           }
         }
       },
       "post": {
         "summary": "Crear una nueva reserva",
+        "description": "Permite crear una nueva reserva en el sistema.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "hotel": { "type": "string", "example": "Hotel Paraíso" },
+                  "tipo_habitacion": { "type": "string", "example": "doble" },
+                  "num_huespedes": { "type": "integer", "example": 3 },
+                  "fecha_llegada": { "type": "string", "format": "date", "example": "2025-05-15" },
+                  "fecha_salida": { "type": "string", "format": "date", "example": "2025-05-20" },
+                  "estado": { "type": "string", "example": "pendiente" },
+                  "cliente": { "type": "string", "example": "Juan Pérez" }
+                },
+                "required": ["hotel", "tipo_habitacion", "num_huespedes", "fecha_llegada", "fecha_salida", "cliente"]
+              }
+            }
+          }
+        },
         "responses": {
           "201": {
-            "description": "Reserva creada"
+            "description": "Reserva creada exitosamente"
+          },
+          "400": {
+            "description": "Error: faltan campos obligatorios"
           }
+        }
+      }
+    },
+    "/api/reservas/{id}": {
+      "get": {
+        "summary": "Obtener información de una reserva específica",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" },
+            "description": "ID único de la reserva"
+          }
+        ],
+        "responses": {
+          "200": { "description": "Reserva encontrada" },
+          "404": { "description": "Reserva no encontrada" }
+        }
+      },
+      "put": {
+        "summary": "Actualizar información de una reserva",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" },
+            "description": "ID de la reserva a actualizar"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "hotel": { "type": "string" },
+                  "tipo_habitacion": { "type": "string" },
+                  "num_huespedes": { "type": "integer" },
+                  "fecha_llegada": { "type": "string", "format": "date" },
+                  "fecha_salida": { "type": "string", "format": "date" },
+                  "estado": { "type": "string" },
+                  "cliente": { "type": "string" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "Reserva actualizada correctamente" },
+          "404": { "description": "Reserva no encontrada" }
+        }
+      },
+      "delete": {
+        "summary": "Eliminar una reserva específica",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" },
+            "description": "ID de la reserva a eliminar"
+          }
+        ],
+        "responses": {
+          "204": { "description": "Reserva eliminada correctamente" },
+          "404": { "description": "Reserva no encontrada" }
         }
       }
     }
