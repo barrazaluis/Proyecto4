@@ -1,0 +1,28 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "API de Reservas de Hotel",
+    "version": "1.0.0",
+    "description": "Documentación de la API para gestionar reservas de hoteles."
+  },
+  "paths": {
+    "/api/reservas": {
+      "get": {
+        "summary": "Listar todas las reservas",
+        "responses": {
+          "200": {
+            "description": "Lista de reservas"
+          }
+        }
+      },
+      "post": {
+        "summary": "Crear una nueva reserva",
+        "responses": {
+          "201": {
+            "description": "Reserva creada"
+          }
+        }
+      }
+    }
+  }
+}

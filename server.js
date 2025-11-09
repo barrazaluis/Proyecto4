@@ -1,10 +1,10 @@
 const express = require('express');
 const reservasRoutes = require('./routes/reservasRoutes');
 const swaggerUi = require('swagger-ui-express');
-const YAML = require('yamljs');
 
 
-const swaggerDocument = YAML.load('./docs/swagger.json');
+const swaggerDocument = require('./docs/swagger.json');
+
 
 require('dotenv').config();
 
@@ -13,7 +13,7 @@ app.use(express.json());
 
 
 app.use('/api/reservas', reservasRoutes);
-app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 
 app.use((err, req, res, next) => {
