@@ -1,5 +1,5 @@
 const express = require('express');
-const reservasRoutes = require('./routes/reservas.routes');
+const reservasRoutes = require('./routes/reservasRoutes');
 const swaggerUi = require('swagger-ui-express');
 const YAML = require('yamljs');
 
